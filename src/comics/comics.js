@@ -40,11 +40,7 @@ function GetComicEmbed(webcomic_id, comic_id) {
 }
 
 function GetWebcomic(webcomic_id) {
-    for(let i = 0; i < ComicList.length; i++) {
-        if(ComicList[i].getInfo().id == webcomic_id) {
-            return ComicList[i];
-        }
-    }
+  return ComicList.find(comic => comic.getInfo().id === webcomic_id);
 }
 
 async function RegisterComics() {
