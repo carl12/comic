@@ -1,7 +1,7 @@
 # Comic Bot | A Discord webcomic-sending bot
-[Invite link](https://discordapp.com/oauth2/authorize?client_id=490328544757678091&scope=bot&permissions=536923136)
+[Invite link](): TODO
 
-[Join the support server](https://discord.gg/FFA9RJE)
+[Join the support server](): TODO
 
 At its core, Comic Bot acts as the comic section of a newspaper. You can subscribe to webcomics, and whenever a new webcomic is posted on a subscribed site it will be automatically sent to a specified channel.
 
@@ -34,3 +34,4 @@ Using the bot is simple. By default the bot uses `,` as its prefix. After inviti
 
 ---
 Made with love in Australia by ItsDuckyyyy.
+Touched up by carl12
