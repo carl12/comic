@@ -23,7 +23,7 @@ class CyanideComic extends BaseComic {
     static getComicWithId(id) {
         return new Promise(function(resolve, reject) {
             try {
-                const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}comics/${id}`;
+                const requestUrl = `${siteUrl}comics/${id}`;
 
                 axios.get(requestUrl)
                     .then(function(response) {
