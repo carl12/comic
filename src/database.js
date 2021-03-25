@@ -91,6 +91,12 @@ function GetGuildsSubscribedTo(comicId) {
     return data.db.collection('guilds').find({ subscribed_comics: comicId }).toArray();
 }
 
+function GetGuildComicChannel(guildId) {
+  return data.db.collection('guilds').findOne({ guild_id: guildId }).then(
+    entry => entry.comic_channel
+    );
+}
+
 function IsConnected() {
     return data.client.isConnected();
 }
@@ -116,7 +122,7 @@ function SubscribeComic(guildId, comicId) {
         throw(Error('not connected to database'));
     }
 
-    return data.db.collection('guilds').findOneAndUpdate({ 'guild_id': guildId }, { $addToSet: { subscribed_comics: comicId } });
+    return data.db.collection('guilds').findOneAndUpdate({ 'guild_id': guildId }, { $addToSet: { subscribed_comics: comicId }});
 }
 
 function UnsubscribeComic(guildId, comicId) {
@@ -134,6 +140,7 @@ module.exports = {
     ConnectDatabse,
     GetComicInfo,
     GetComicInfoAll,
+    GetGuildComicChannel,
     GetGuildInfo,
     GetGuildInfoAll,
     GetGuildsSubscribedTo,
