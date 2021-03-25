@@ -1,8 +1,8 @@
 const config = require('../config.json');
 
 const Database = require('../src/database');
+const { client } = require('./utility/botUtils');
 
-const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
 
 const { GetComic, GetComicEmbed, ComicList, RegisterComics } = require('../src/comics/comics');
@@ -12,12 +12,6 @@ Database.ConnectDatabse(config.connectUri).then(async function() {
     await client.login(config.token);
     await RegisterComics();
     await CheckNewComics();
-});
-
-const client = new CommandoClient({
-    commandPrefix: config.commandPrefix,
-    owner: config.owner,
-    invite: config.invite,
 });
 
 client.registry
@@ -50,7 +44,6 @@ process.on('unhandledRejection', error => {
 });
 
 client.setInterval(CheckNewComics, 5 * 60 * 1000);
-
 async function CheckNewComics() {
     for(const comic of ComicList) {
         const id = comic.getInfo().id;
