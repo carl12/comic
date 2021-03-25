@@ -9,6 +9,7 @@ At its core, Comic Bot acts as the comic section of a newspaper. You can subscri
 * [Channelate](http://channelate.com/) - id: `channelate`
 * [Cyanide and Happiness](http://explosm.net/) - id: `cyanide`
 * [Extra Ordinary](https://exocomics.com/) - id: `exo`
+* [Hi, I'm Liz](https://lizclimo.tumblr.com/) - id: `lizclimo`
 * [Saturday Morning Breakfast Cereal](https://smbc-comics.com) - id: `smbc`
 * [Swords](https://swordscomic.com/) - id: `swords`
 * [White Noise](http://www.white-noise-comic.com/) - id: `whitenoise`
