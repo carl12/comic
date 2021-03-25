@@ -12,7 +12,7 @@ module.exports = class ComicCommand extends Command {
             args: [
                 {
                     key: 'webcomic_id',
-                    prompt: 'Please type the webcomic you would like to fetch. See https://github.com/joshuanits/comic#supported-webcomics for a list of IDs',
+                    prompt: 'Please type the webcomic you would like to fetch. See https://github.com/carl12/comic#supported-webcomics for a list of IDs',
                     type: 'string',
                 },
                 {
