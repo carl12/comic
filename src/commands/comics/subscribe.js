@@ -30,12 +30,14 @@ module.exports = class SubscribeCommand extends Command {
       const res = await SubscribeComic(message.guild.id, comicId);
       if (res.ok) {
         message.reply(`Subscribed to ${webcomic.getInfo().name}`);
+        console.log(`Added subscription for ${webcomic_id}`);
         const channel_id = await GetGuildComicChannel(message.guild.id);
         const latestComic = await GetComic(webcomic.getInfo().id, 'latest');
         const embed = await GetComicEmbed(webcomic.getInfo().id, latestComic.id);
         const channel = await client.channels.fetch(channel_id);
         channel.send(`New ${webcomic.getInfo().name} comic!`);
         channel.send(embed);
+        console.log(`Posted preview for webcomic ${webcomic_id}`);
       } else {
         message.reply('Something went wrong.');
       }
