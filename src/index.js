@@ -70,6 +70,7 @@ async function CheckNewComics() {
                 const channel = await client.channels.fetch(guild.comic_channel);
                 channel.send(`New ${comic.getInfo().name} comic!`);
                 channel.send(embed);
+                console.log(`Posted subscribe update for ${comic.getInfo().name} with id ${comic.id}`);
             }
         }
     }
