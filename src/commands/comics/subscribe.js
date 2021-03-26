@@ -26,28 +26,27 @@ module.exports = class SubscribeCommand extends Command {
   async run(message, { webcomic_id }) {
     const comicId = webcomic_id.split(' ')[0];
     const webcomic = GetWebcomic(comicId);
-    if (webcomic) {
-      const res = await SubscribeComic(message.guild.id, comicId);
-      if (res.ok) {
-        message.reply(`Subscribed to ${webcomic.getInfo().name}`);
-        console.log(`Added subscription for ${webcomic_id}`);
-        const { channel_id } = await GetGuildInfo(message.guild.id);
-        console.log('1');
-        const latestComic = await GetComic(webcomic.getInfo().id, 'latest');
-        console.log('2');
-        const embed = await GetComicEmbed(webcomic.getInfo().id, latestComic.id);
-        console.log('3');
-        const channel = await client.channels.fetch(channel_id);
-        console.log('4');
-        channel.send(`New ${webcomic.getInfo().name} comic!`);
-        console.log('5');
-        channel.send(embed);
-        console.log(`Posted preview for webcomic ${webcomic_id}`);
-      } else {
-        message.reply('Something went wrong.');
-      }
-    } else {
+    if (!webcomic) {
       message.reply(`Sorry, there is no comic with the id ${comicId}`);
+      return;
     }
+    const res = await SubscribeComic(message.guild.id, comicId);
+    if (!res.ok) {
+      message.reply('Something went wrong.');
+      return;
+    }
+    message.reply(`Subscribed to ${webcomic.getInfo().name}`);
+    console.log(`Added subscription for ${webcomic_id}`);
+    const { channel_id } = await GetGuildInfo(message.guild.id);
+    if (!channel_id) {
+      message.reply('Please set a channel id for comics subscriptions');
+      return;
+    }
+    const latestComic = await GetComic(webcomic.getInfo().id, 'latest');
+    const embed = await GetComicEmbed(webcomic.getInfo().id, latestComic.id);
+    const channel = await client.channels.fetch(channel_id);
+    channel.send(`New ${webcomic.getInfo().name} comic!`);
+    channel.send(embed);
+    console.log(`Posted preview for webcomic ${webcomic_id}`);
   }
 };
