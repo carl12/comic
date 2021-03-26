@@ -22,15 +22,13 @@ module.exports = class UnsubscribeCommand extends Command {
 
   async run(message, { webcomic_id }) {
     const webcomic = GetWebcomic(webcomic_id);
-    if (webcomic) {
-      const res = await UnsubscribeComic(message.guild.id, webcomic_id);
-      if (res.ok) {
-        message.reply(`Unsubscribed from ${webcomic.getInfo().name}`);
-      } else {
-        message.reply('Something went wrong.');
-      }
-    } else {
-      message.reply(`Sorry, there is no comic with the id ${webcomic_id}`);
+    if (!webcomic) {
+      return message.reply(`Sorry, there is no comic with the id ${webcomic_id}`);
     }
+    const res = await UnsubscribeComic(message.guild.id, webcomic_id);
+    if (!res.ok) {
+      return message.reply('Something went wrong.');
+    }
+    message.reply(`Unsubscribed from ${webcomic.getInfo().name}`);
   }
 };

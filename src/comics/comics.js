@@ -5,6 +5,7 @@ const ChannelateComic = require('./channelate');
 const CyanideComic = require('./cyanide');
 const ExoComic = require('./exo');
 const LizComic = require('./lizclimo');
+const PeanutsComic = require('./peanuts');
 const SMBCComic = require('./smbc');
 const SwordsComic = require('./swords');
 const WhiteNoiseComic = require('./whitenoise');
@@ -63,6 +64,7 @@ const ComicList = [
   CyanideComic,
   ExoComic,
   LizComic,
+  PeanutsComic,
   SMBCComic,
   SwordsComic,
   WhiteNoiseComic,

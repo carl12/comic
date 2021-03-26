@@ -43,9 +43,8 @@ function ConnectDatabse(connectUri, db) {
   }
 
   data.client = new MongoClient(connectUri, { useNewUrlParser: true, useUnifiedTopology: true });
-  return data.client.connect().then(function () {
-    data.db = data.client.db(db);
-  }).catch(function (err) {
+  return data.client.connect().then(() => data.db = data.client.db(db))
+  .catch(err => {
     console.log('Failed to connect to Mongodb. Error:');
     console.log(err);
   });

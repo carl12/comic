@@ -17,6 +17,26 @@ class BaseComic {
     this.info.authorUrl = 'https://example.com';
   }
 
+  withId(id) {
+    this.id = id;
+    return this;
+  }
+
+  withImageUrl(url) {
+    this.imageUrl = url;
+    return this;
+  }
+
+  withName(name) {
+    this.name = name;
+    return this;
+  }
+
+  withUrl(url) {
+    this.url = url;
+    return this;
+  }
+
   // Returns a promise to a comic
   static getComicWithId(id) {
     // This would usually fetch a comic

@@ -8,7 +8,7 @@ const path = require('path');
 const { GetComic, GetComicEmbed, ComicList, RegisterComics } = require('../src/comics/comics');
 const { GetComicInfo, GetGuildInfo, GetGuildInfoAll, AddGuildInfo, ModifyComicInfo, GetGuildsSubscribedTo } = require('../src/database');
 
-Database.ConnectDatabse(config.connectUri).then(async function () {
+Database.ConnectDatabse(config.connectUri).then(async () => {
   await client.login(config.token);
   await RegisterComics();
   await CheckNewComics();
@@ -28,7 +28,7 @@ client.once('ready', () => {
   CheckNewGuilds();
 });
 
-client.on('guildCreate', async function (guild) {
+client.on('guildCreate', async (guild) => {
   // Check if we already have info for this guild
 
   console.log('Joined guild ' + guild.id);
@@ -82,9 +82,7 @@ async function CheckNewGuilds() {
   const guildInfos = await GetGuildInfoAll();
 
   client.guilds.cache.forEach(function (guild) {
-    if (!guildInfos.some(function (e) {
-      return guild.id = e.guild_id;
-    })) {
+    if (!guildInfos.some(e => guild.id = e.guild_id)) {
       // Add guild info
       AddGuildInfo(guild.id);
     }
