@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const { GetWebcomic } = require('../../comics/comics');
-const { SubscribeComic, GetGuildComicChannel } = require('../../database');
+const { SubscribeComic, GetGuildComicChannel, GetGuildInfo } = require('../../database');
 const config = require('../../../config.json');
 const { client } = require('../../utility/botUtils');
 const { GetComicEmbed, GetComic } = require('../../comics/comics');
@@ -31,11 +31,16 @@ module.exports = class SubscribeCommand extends Command {
       if (res.ok) {
         message.reply(`Subscribed to ${webcomic.getInfo().name}`);
         console.log(`Added subscription for ${webcomic_id}`);
-        const channel_id = await GetGuildComicChannel(message.guild.id);
+        const { channel_id } = await GetGuildInfo(message.guild.id);
+        console.log('1');
         const latestComic = await GetComic(webcomic.getInfo().id, 'latest');
+        console.log('2');
         const embed = await GetComicEmbed(webcomic.getInfo().id, latestComic.id);
+        console.log('3');
         const channel = await client.channels.fetch(channel_id);
+        console.log('4');
         channel.send(`New ${webcomic.getInfo().name} comic!`);
+        console.log('5');
         channel.send(embed);
         console.log(`Posted preview for webcomic ${webcomic_id}`);
       } else {
