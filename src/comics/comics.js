@@ -12,32 +12,32 @@ const WildelifeComic = require('./wildelife');
 const XKCDComic = require('./xkcd');
 
 function GetComic(webcomic_id, comic_id) {
-    for (let i = 0; i < ComicList.length; i++) {
-        const comic = ComicList[i];
-        if(comic.getInfo().id == webcomic_id) {
-            return comic.getComicWithId(comic_id);
-        }
+  for (let i = 0; i < ComicList.length; i++) {
+    const comic = ComicList[i];
+    if (comic.getInfo().id == webcomic_id) {
+      return comic.getComicWithId(comic_id);
     }
+  }
 
-    throw('comic not found');
+  throw ('comic not found');
 }
 
 function GetComicEmbed(webcomic_id, comic_id) {
-    return GetComic(webcomic_id, comic_id).then(function(comic) {
+  return GetComic(webcomic_id, comic_id).then(function (comic) {
 
-        const embed = new MessageEmbed()
-        .setColor('aqua')
-        .setTitle(comic.name)
-        .setURL(comic.url)
-        .setAuthor(comic.info.author, null, comic.info.authorUrl)
-        .setImage(comic.imageUrl);
+    const embed = new MessageEmbed()
+      .setColor('aqua')
+      .setTitle(comic.name)
+      .setURL(comic.url)
+      .setAuthor(comic.info.author, null, comic.info.authorUrl)
+      .setImage(comic.imageUrl);
 
-        if(comic.bonusUrl != '') {
-            embed.addField('Bonus url', comic.bonusUrl);
-        }
+    if (comic.bonusUrl != '') {
+      embed.addField('Bonus url', comic.bonusUrl);
+    }
 
-        return embed;
-    });
+    return embed;
+  });
 }
 
 function GetWebcomic(webcomic_id) {
@@ -45,35 +45,35 @@ function GetWebcomic(webcomic_id) {
 }
 
 async function RegisterComics() {
-    const comicInfos = await GetComicInfoAll();
+  const comicInfos = await GetComicInfoAll();
 
-    ComicList.forEach(function(comic) {
-        const id = comic.getInfo().id;
-        if(!comicInfos.some(function(e) {
-            return id === e.comic_id;
-        })) {
-            // Add comic info
-            AddComicInfo(id);
-        }
-    });
+  ComicList.forEach(function (comic) {
+    const id = comic.getInfo().id;
+    if (!comicInfos.some(function (e) {
+      return id === e.comic_id;
+    })) {
+      // Add comic info
+      AddComicInfo(id);
+    }
+  });
 }
 
 const ComicList = [
-    ChannelateComic,
-    CyanideComic,
-    ExoComic,
-    LizComic,
-    SMBCComic,
-    SwordsComic,
-    WhiteNoiseComic,
-    WildelifeComic,
-    XKCDComic,
+  ChannelateComic,
+  CyanideComic,
+  ExoComic,
+  LizComic,
+  SMBCComic,
+  SwordsComic,
+  WhiteNoiseComic,
+  WildelifeComic,
+  XKCDComic,
 ];
 
 module.exports = {
-    GetComic,
-    GetComicEmbed,
-    GetWebcomic,
-    RegisterComics,
-    ComicList,
+  GetComic,
+  GetComicEmbed,
+  GetWebcomic,
+  RegisterComics,
+  ComicList,
 };

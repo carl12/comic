@@ -9,11 +9,11 @@ const client = new CommandoClient({
 });
 
 function hasPerms(message) {
-    const guildMember = message.guild.member(message.author);
-    return guildMember.hasPermission(Permissions.FLAGS.ADMINISTRATOR);
+  const guildMember = message.guild.member(message.author);
+  return guildMember.hasPermission(Permissions.FLAGS.ADMINISTRATOR);
 }
 
 module.exports = {
-    hasPerms,
-    client
+  hasPerms,
+  client
 };
