@@ -37,15 +37,15 @@ module.exports = class SubscribeCommand extends Command {
     }
     message.reply(`Subscribed to ${webcomic.getInfo().name}`);
     console.log(`Added subscription for ${webcomic_id}`);
-    const { channel_id } = await GetGuildInfo(message.guild.id);
-    console.log(message.guild.id, channel_id);
-    if (!channel_id) {
+    const { comic_channel } = await GetGuildInfo(message.guild.id);
+    console.log(message.guild.id, comic_channel);
+    if (!comic_channel) {
       message.reply('Please set a channel id for comics subscriptions');
       return;
     }
     const latestComic = await GetComic(webcomic.getInfo().id, 'latest');
     const embed = await GetComicEmbed(webcomic.getInfo().id, latestComic.id);
-    const channel = await client.channels.fetch(channel_id);
+    const channel = await client.channels.fetch(comic_channel);
     channel.send(`New ${webcomic.getInfo().name} comic!`);
     channel.send(embed);
     console.log(`Posted preview for webcomic ${webcomic_id}`);
