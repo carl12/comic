@@ -38,6 +38,7 @@ module.exports = class SubscribeCommand extends Command {
     message.reply(`Subscribed to ${webcomic.getInfo().name}`);
     console.log(`Added subscription for ${webcomic_id}`);
     const { channel_id } = await GetGuildInfo(message.guild.id);
+    console.log(message.guild.id, channel_id);
     if (!channel_id) {
       message.reply('Please set a channel id for comics subscriptions');
       return;
