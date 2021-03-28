@@ -19,7 +19,8 @@ class PeanutsComic extends BaseComic {
   }
 
   static getUrl(rawId) {
-    const d = new Date();
+    // Gcloud is on utc, which messes up output date
+    const d = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
 
     if (Number(rawId) <= 0) {
       return  `${siteUrl}${PeanutsComic.makeSuffix(new Date(d.setDate(d.getDate() + Number(rawId))))}`
@@ -53,7 +54,7 @@ class PeanutsComic extends BaseComic {
             // Fetch comic data from response
             const data = response.data;
             comic
-              .withId(requestUrl.split('/').slice(-3).join('/'))
+              .withId(node.attribs.alt)
               .withImageUrl(node.attribs.src)
               .withName("Peanuts")
               .withUrl(requestUrl);
