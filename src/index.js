@@ -8,6 +8,8 @@ const path = require('path');
 const { GetComic, GetComicEmbed, ComicList, RegisterComics } = require('../src/comics/comics');
 const { GetComicInfo, GetGuildInfo, GetGuildInfoAll, AddGuildInfo, ModifyComicInfo, GetGuildsSubscribedTo } = require('../src/database');
 
+const newComicCheckInterval = 5 * 60 * 1000; // 5 minutes
+
 Database.ConnectDatabse(config.connectUri).then(async () => {
   await client.login(config.token);
   await RegisterComics();
@@ -43,9 +45,8 @@ process.on('unhandledRejection', error => {
   console.error('Unhandled promise rejection:', error);
 });
 
-client.setInterval(CheckNewComics, 5 * 60 * 1000);
+client.setInterval(CheckNewComics, newComicCheckInterval);
 async function CheckNewComics() {
-  console.log('checking for comics');
   for (const comic of ComicList) {
     const id = comic.getInfo().id;
 
@@ -66,15 +67,18 @@ async function CheckNewComics() {
     const guilds = await GetGuildsSubscribedTo(id);
     const embed = await GetComicEmbed(id, latestComic.id);
 
+    let posted = 0;
     for (const guild of guilds) {
-      if (guild.comic_channel != '') {
-        // Send comic
-        const channel = await client.channels.fetch(guild.comic_channel);
-        channel.send(`New ${comic.getInfo().name} comic!`);
-        channel.send(embed);
-        console.log(`Posted subscribe update for ${comic.getInfo().name} with id ${comic.id}`);
+      if (guild.comic_channel == '') {
+        continue;
       }
+      // Send comic
+      const channel = await client.channels.fetch(guild.comic_channel);
+      channel.send(`New ${comic.getInfo().name} comic!`);
+      channel.send(embed);
+      posted ++;
     }
+    console.log(`Posted ${posted} subscribe updates for ${comic.getInfo().name} with id: ${latestComic.id}`);
   }
 }
 
