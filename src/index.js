@@ -48,10 +48,11 @@ async function CheckNewComics() {
   console.log('checking for comics');
   for (const comic of ComicList) {
     const id = comic.getInfo().id;
+
     const latestComic = await GetComic(id, 'latest');
     const comicInfo = await GetComicInfo(id);
 
-    if (latestComic.id === comicInfo.latest_id) {
+    if (latestComic.id === comicInfo?.latest_id) {
       continue;
     }
 
