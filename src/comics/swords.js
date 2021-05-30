@@ -21,7 +21,9 @@ class SwordsComic extends BaseComic {
   static getComicWithId(id) {
     const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}comic/${id}`;
     return axios.get(requestUrl).then(function (response) {
-
+      if (response.status != 200) {
+        throw (`http status ${response.status} for ${requestUrl}`);
+      }
       const comic = new SwordsComic();
 
       // Data needs to be extracted from meta tags. for whatever reason this won't work with xmldom
