@@ -6,6 +6,7 @@ const CyanideComic = require('./cyanide');
 const ExoComic = require('./exo');
 const LizComic = require('./lizclimo');
 const PeanutsComic = require('./peanuts');
+const SarahScribblesComic = require('./sarahscribbles');
 const SMBCComic = require('./smbc');
 const SwordsComic = require('./swords');
 const WhiteNoiseComic = require('./whitenoise');
@@ -19,13 +20,15 @@ function GetComic(webcomic_id, comic_id) {
       return comic.getComicWithId(comic_id);
     }
   }
-
-  throw ('comic not found');
+  return Promise.resolve(null);
+  // throw ('comic not found');
 }
 
 function GetComicEmbed(webcomic_id, comic_id) {
   return GetComic(webcomic_id, comic_id).then(function (comic) {
-
+    if (!comic) {
+      return null;
+    }
     const embed = new MessageEmbed()
       .setColor('aqua')
       .setTitle(comic.name)
@@ -69,6 +72,7 @@ const ComicList = [
   WhiteNoiseComic,
   WildelifeComic,
   XKCDComic,
+  SarahScribblesComic
 ];
 
 module.exports = {
