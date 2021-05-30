@@ -41,6 +41,10 @@ client.on('guildCreate', async (guild) => {
   }
 });
 
+process.on('unhandledRejection', error => {
+  console.error('Unhandled promise rejection:', error);
+});
+
 client.setInterval(CheckNewComics, newComicCheckInterval);
 async function CheckNewComics() {
   for (const comic of ComicList) {
