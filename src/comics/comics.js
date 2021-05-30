@@ -53,7 +53,6 @@ async function RegisterComics() {
     if (!comicInfos.some(function (e) {
       return id === e.comic_id;
     })) {
-      // Add comic info
       AddComicInfo(id);
     }
   });

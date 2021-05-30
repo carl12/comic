@@ -21,51 +21,41 @@ class CyanideComic extends BaseComic {
 
   // Returns a promise to a comic
   static getComicWithId(id) {
-    return new Promise(function (resolve, reject) {
-      try {
-        const requestUrl = `${siteUrl}comics/${id}`;
-
-        axios.get(requestUrl)
-          .then(function (response) {
-            if (response.status != 200) {
-              throw (`http status ${response.status}`);
-            }
-
-            const comic = new CyanideComic();
-
-            // Fetch comic data from response
-            const doc = new DOMParser({ errorHandler: { warning: null } }).parseFromString(response.data);
-            const select = xpath.useNamespaces({ 'html': 'http://www.w3.org/1999/xhtml' });
-            const imageNode = select('//*[@id=\'main-comic\']', doc)[0];
-
-            // Image url
-            comic.imageUrl = 'https:' + imageNode.getAttribute('src');
-
-            const authorNode = select('//*[@id=\'comic-author\']', doc)[0];
-
-            // Comic title
-            comic.name = authorNode.textContent;
-
-            if (id == 'latest') {
-              const linkNode = select('//*[@id=\'comic-social-link\']', doc)[0];
-
-              // Comic url example http://explosm.net/comics/5705
-              comic.url = linkNode.getAttribute('href');
-
-              // Comic id
-              comic.id = comic.url.split('/').slice(-1)[0];
-            } else {
-              comic.url = requestUrl;
-              comic.id = id;
-            }
-
-            resolve(comic);
-          }).catch(function (error) {
-            reject(error);
-          });
-      } catch (error) {
-        reject(error);
+    const requestUrl = `${siteUrl}comics/${id}`;
+    return axios.get(requestUrl).then(function (response) {
+      if (response.status != 200) {
+        throw (`http status ${response.status} for ${requestUrl}`);
       }
+
+      const comic = new CyanideComic();
+
+      // Fetch comic data from response
+      const doc = new DOMParser({ errorHandler: { warning: null } }).parseFromString(response.data);
+      const select = xpath.useNamespaces({ 'html': 'http://www.w3.org/1999/xhtml' });
+      const imageNode = select('//*[@id=\'main-comic\']', doc)[0];
+
+      // Image url
+      comic.imageUrl = 'https:' + imageNode.getAttribute('src');
+
+      const authorNode = select('//*[@id=\'comic-author\']', doc)[0];
+
+      // Comic title
+      comic.name = authorNode.textContent;
+
+      if (id == 'latest') {
+        const linkNode = select('//*[@id=\'comic-social-link\']', doc)[0];
+
+        // Comic url example http://explosm.net/comics/5705
+        comic.url = linkNode.getAttribute('href');
+
+        // Comic id
+        comic.id = comic.url.split('/').slice(-1)[0];
+      } else {
+        comic.url = requestUrl;
+        comic.id = id;
+      }
+
+      return comic;
     });
   }
 

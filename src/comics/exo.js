@@ -21,43 +21,33 @@ class ExoComic extends BaseComic {
 
   // Returns a promise to a comic
   static getComicWithId(id) {
-    return new Promise(function (resolve, reject) {
-      try {
-        const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}${id}`;
-
-        axios.get(requestUrl)
-          .then(function (response) {
-            if (response.status != 200) {
-              throw (`http status ${response.status}`);
-            }
-
-            const comic = new ExoComic();
-
-            // Fetch comic data from response
-            const doc = new DOMParser({ errorHandler: { warning: null } }).parseFromString(response.data);
-            const select = xpath.useNamespaces({ 'html': 'http://www.w3.org/1999/xhtml' });
-            const imageNode = select('//*[@class=\'image-style-main-comic\']', doc)[0];
-
-            // Image url
-            comic.imageUrl = imageNode.getAttribute('src');
-
-            // Comic id
-            comic.id = imageNode.getAttribute('alt');
-
-            // Comic title
-            const title = imageNode.getAttribute('title');
-            comic.name = title == '' ? comic.id : title;
-
-            // Comic url
-            comic.url = siteUrl + comic.id;
-
-            resolve(comic);
-          }).catch(function (error) {
-            reject(error);
-          });
-      } catch (error) {
-        reject(error);
+    const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}${id}`;
+    return axios.get(requestUrl).then(function (response) {
+      if (response.status != 200) {
+        throw (`http status ${response.status} for ${requestUrl}`);
       }
+
+      const comic = new ExoComic();
+
+      // Fetch comic data from response
+      const doc = new DOMParser({ errorHandler: { warning: null } }).parseFromString(response.data);
+      const select = xpath.useNamespaces({ 'html': 'http://www.w3.org/1999/xhtml' });
+      const imageNode = select('//*[@class=\'image-style-main-comic\']', doc)[0];
+
+      // Image url
+      comic.imageUrl = imageNode.getAttribute('src');
+
+      // Comic id
+      comic.id = imageNode.getAttribute('alt');
+
+      // Comic title
+      const title = imageNode.getAttribute('title');
+      comic.name = title == '' ? comic.id : title;
+
+      // Comic url
+      comic.url = siteUrl + comic.id;
+
+      return comic;
     });
   }
 

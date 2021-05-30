@@ -21,51 +21,41 @@ class SMBCComic extends BaseComic {
 
   // Returns a promise to a comic
   static getComicWithId(id) {
-    return new Promise(function (resolve, reject) {
-      try {
-        const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}comic/${id}`;
-
-        axios.get(requestUrl)
-          .then(function (response) {
-            if (response.status != 200) {
-              throw (`http status ${response.status}`);
-            }
-
-            const comic = new SMBCComic();
-
-            // Fetch comic data from response
-            const doc = new DOMParser({ errorHandler: { warning: null } }).parseFromString(response.data);
-            const select = xpath.useNamespaces({ 'html': 'http://www.w3.org/1999/xhtml' });
-            const imageNode = select('//*[@id=\'cc-comic\']', doc)[0];
-
-            // Image url
-            comic.imageUrl = imageNode.getAttribute('src');
-
-            // Comic title
-            comic.name = imageNode.getAttribute('title');
-
-            const linkNode = select('//*[@id=\'permalinktext\']', doc)[0];
-
-            // Comic url
-            comic.url = linkNode.getAttribute('value');
-
-            // Comic id
-            comic.id = comic.url.split('/').slice(-1)[0];
-
-            // Bonus image
-            const bonusNode = select('//*[@id=\'aftercomic\']', doc)[0];
-
-            if (bonusNode != undefined) {
-              comic.bonusUrl = bonusNode.firstChild.getAttribute('src');
-            }
-
-            resolve(comic);
-          }).catch(function (error) {
-            reject(error);
-          });
-      } catch (error) {
-        reject(error);
+    const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}comic/${id}`;
+    return axios.get(requestUrl).then(function (response) {
+      if (response.status != 200) {
+        throw (`http status ${response.status} for ${requestUrl}`);
       }
+
+      const comic = new SMBCComic();
+
+      // Fetch comic data from response
+      const doc = new DOMParser({ errorHandler: { warning: null } }).parseFromString(response.data);
+      const select = xpath.useNamespaces({ 'html': 'http://www.w3.org/1999/xhtml' });
+      const imageNode = select('//*[@id=\'cc-comic\']', doc)[0];
+
+      // Image url
+      comic.imageUrl = imageNode.getAttribute('src');
+
+      // Comic title
+      comic.name = imageNode.getAttribute('title');
+
+      const linkNode = select('//*[@id=\'permalinktext\']', doc)[0];
+
+      // Comic url
+      comic.url = linkNode.getAttribute('value');
+
+      // Comic id
+      comic.id = comic.url.split('/').slice(-1)[0];
+
+      // Bonus image
+      const bonusNode = select('//*[@id=\'aftercomic\']', doc)[0];
+
+      if (bonusNode != undefined) {
+        comic.bonusUrl = bonusNode.firstChild.getAttribute('src');
+      }
+
+      return comic;
     });
   }
 

@@ -19,37 +19,27 @@ class SwordsComic extends BaseComic {
 
   // Returns a promise to a comic
   static getComicWithId(id) {
-    return new Promise(function (resolve, reject) {
-      try {
-        const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}comic/${id}`;
+    const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}comic/${id}`;
+    return axios.get(requestUrl).then(function (response) {
 
-        axios.get(requestUrl)
-          .then(function (response) {
+      const comic = new SwordsComic();
 
-            const comic = new SwordsComic();
+      // Data needs to be extracted from meta tags. for whatever reason this won't work with xmldom
+      response.data.match(/<meta[^>]*>/g).forEach(element => {
+        if (element.includes('og:title')) {
+          // Extract title
+          comic.name = element.split('"').slice(-2)[0];
+        } else if (element.includes('og:image')) {
+          // Extract image url
+          comic.imageUrl = element.split('"').slice(-2)[0];
+        } else if (element.includes('og:url')) {
+          // Extract url and id
+          comic.url = element.split('"').slice(-2)[0];
+          comic.id = comic.url.split('/').slice(-2)[0];
+        }
+      });
 
-            // Data needs to be extracted from meta tags. for whatever reason this won't work with xmldom
-            response.data.match(/<meta[^>]*>/g).forEach(element => {
-              if (element.includes('og:title')) {
-                // Extract title
-                comic.name = element.split('"').slice(-2)[0];
-              } else if (element.includes('og:image')) {
-                // Extract image url
-                comic.imageUrl = element.split('"').slice(-2)[0];
-              } else if (element.includes('og:url')) {
-                // Extract url and id
-                comic.url = element.split('"').slice(-2)[0];
-                comic.id = comic.url.split('/').slice(-2)[0];
-              }
-            });
-
-            resolve(comic);
-          }).catch(function (error) {
-            reject(error);
-          });
-      } catch (error) {
-        reject(error);
-      }
+      return comic;
     });
   }
 

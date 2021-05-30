@@ -37,6 +37,11 @@ class BaseComic {
     return this;
   }
 
+  withBonusUrl(url) {
+    this.bonusUrl = url;
+    return this;
+  }
+
   // Returns a promise to a comic
   static getComicWithId(id) {
     // This would usually fetch a comic

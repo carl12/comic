@@ -44,44 +44,34 @@ class LizComic extends BaseComic {
 
   // Returns a promise to a comic
   static getComicWithId(id) {
+    // const requestUrl = `${siteUrl}post/${parsedId}`;
+    const options = { type: 'photo', limit: 1 };
+    if (LizComic.isAbsoluteId(id)) {
+      options.id = id;
+    } else {
+      options.offset = -Number(id);
+    }
     return new Promise(async function (resolve, reject) {
-      try {
-        // const requestUrl = `${siteUrl}post/${parsedId}`;
-        const options = { type: 'photo', limit: 1 };
-        if (LizComic.isAbsoluteId(id)) {
-          options.id = id;
-        } else {
-          options.offset = -Number(id);
+      client.blogPosts('lizclimo.tumblr.com', options, (err, data) => {
+        if (err) {
+          reject(`Error getting blog: ${err}`)
         }
-        client.blogPosts('lizclimo.tumblr.com', options, (err, data) => {
-          try {
-            if (err) {
-              throw (`Error getting blog: ${err}`)
-            }
 
-            const comic = new LizComic();
-            const post = data.posts[0];
-            if (!post) {
-              throw (`No post found matching for id ${id}`)
-            }
-            const firstPhotoUrl = post.photos[0].alt_sizes[1].url;
-            comic.addInfo({
-              imageUrl: firstPhotoUrl,
-              name: post.summary,
-              url: post.post_url,
-              id: post.id
-            });
-            // comic.bonusUrl = undefined;
-            resolve(comic);
-          } catch (error) {
-            reject(error);
-          }
-
-
+        const comic = new LizComic();
+        const post = data.posts[0];
+        if (!post) {
+          throw (`No post found matching for id ${id}`)
+        }
+        const firstPhotoUrl = post.photos[0].alt_sizes[1].url;
+        comic.addInfo({
+          imageUrl: firstPhotoUrl,
+          name: post.summary,
+          url: post.post_url,
+          id: post.id
         });
-      } catch (error) {
-        reject(error);
-      }
+        // comic.bonusUrl = undefined;
+        resolve(comic);
+      });
     });
   }
 

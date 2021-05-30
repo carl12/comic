@@ -17,11 +17,14 @@ class PeanutsComic extends BaseComic {
       authorUrl: 'https://www.gocomics.com/peanuts/',
     };
   }
-
+  /**
+   * Interprets rawId as either number ago (negative), date (with "/") else most recent
+   * @param {*} rawId
+   * @returns url: string
+   */
   static getUrl(rawId) {
     // Gcloud is on utc, which messes up output date
     const d = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
-
     if (Number(rawId) <= 0) {
       return  `${siteUrl}${PeanutsComic.makeSuffix(new Date(d.setDate(d.getDate() + Number(rawId))))}`
     } else if (rawId.split('/').length === 3) {
@@ -37,35 +40,19 @@ class PeanutsComic extends BaseComic {
 
   // Returns a promise to a comic
   static getComicWithId(rawId) {
-    return new Promise(function (resolve, reject) {
-      try {
-        const requestUrl = PeanutsComic.getUrl(rawId);
-
-        axios.get(requestUrl)
-          .then(function (response) {
-            if (response.status != 200) {
-              throw (`http status ${response.status}`);
-            }
-            const $ = cheerio.load(response.data);
-            const node = $('.img-fluid')[1];
-
-            const comic = new PeanutsComic();
-
-            // Fetch comic data from response
-            const data = response.data;
-            comic
-              .withId(node.attribs.alt)
-              .withImageUrl(node.attribs.src)
-              .withName("Peanuts")
-              .withUrl(requestUrl);
-
-            resolve(comic);
-          }).catch(function (error) {
-            reject(error);
-          });
-      } catch (error) {
-        reject(error);
+    const requestUrl = PeanutsComic.getUrl(rawId);
+    return axios.get(requestUrl) .then(response => {
+      if (response.status != 200) {
+        throw (`http status ${response.status} for ${requestUrl}`);
       }
+      const $ = cheerio.load(response.data);
+      const node = $('.img-fluid')[1];
+
+      return new PeanutsComic()
+        .withId(node.attribs.alt)
+        .withImageUrl(node.attribs.src)
+        .withName("Peanuts")
+        .withUrl(requestUrl);
     });
   }
 
