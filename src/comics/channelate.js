@@ -3,7 +3,7 @@ const BaseComic = require('./base');
 const axios = require('axios');
 const DOMParser = require('xmldom').DOMParser;
 const xpath = require('xpath');
-
+const cheerio = require('cheerio');
 const siteUrl = 'https://www.channelate.com/';
 
 class ChannelateComic extends BaseComic {
@@ -20,28 +20,27 @@ class ChannelateComic extends BaseComic {
   }
 
   // Returns a promise to a comic
-  static getComicWithId(id) {
+  static async getComicWithId(id) {
     const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}comics/${id}`;
-    return axios.get(requestUrl).then(response => {
-      if (response.status != 200) {
-        throw (`http status ${response.status} for ${requestUrl}`);
-      }
-      const comic = new ChannelateComic();
+    const response = await axios.get(requestUrl);
+    if (response.status != 200) {
+      throw (`http status ${response.status} for ${requestUrl}`);
+    }
+    const comic = new ChannelateComic();
 
-      // Fetch comic data from response
-      const doc = new DOMParser({ errorHandler: { warning: null } }).parseFromString(response.data);
-      const select = xpath.useNamespaces({ 'html': 'http://www.w3.org/1999/xhtml' });
-      const imageNode = select('//*[@id=\'comic\']/html:span/html:img', doc)[0];
-      const titleNode = select('//html:h2[@class=\'post-title\']/html:a', doc)[0];
-      const bonusNode = select('//html:div[@id=\'extrapanelbutton\']/html:a', doc);
+    // Fetch comic data from response
+    const $ = cheerio.load(response.data);
+    const imageNode2 = $('#comic')[0];
+    const titleNode2 = $('.post-title')[0];
+    const bonusNode2 = $('#extrapanelbutton')[0];
+    const comicUrl = titleNode2.childNodes[0].attribs?.href ?? requestUrl;
+    return comic
+      .withImageUrl(imageNode2.attribs.id)
+      .withName(imageNode2.childNodes[1].childNodes[0].attribs.title)
+      .withUrl(comicUrl)
+      .withId(comicUrl.split('/').slice(-2)[0])
+      .withBonusUrl(bonusNode2?.attribs.href);
 
-      return comic
-        .withImageUrl(imageNode.getAttribute('src'))
-        .withName(imageNode.getAttribute('title'))
-        .withUrl(titleNode.getAttribute('href'))
-        .withId(comic.url.split('/').slice(-2)[0])
-        .withBonusUrl(bonusNode[0]?.getAttribute('href'));
-    });
   }
 
   static getInfo() {

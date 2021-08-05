@@ -25,6 +25,8 @@ class SarahScribblesComic extends BaseComic {
 
   // Returns a promise to a comic
   static async getComicWithId(num) {
+    // TODO: saved id is passed in as number, which results in blank comic being fetched.
+    // URL uses /page/1 for most recent and ~/700 for oldest. The ids saved as comic ids are tumblr ids which are over 9 digits long
     const requestUrl = (num == 'latest') ? siteUrl : `${siteUrl}page/${num}`;
     const response = await axios.get(requestUrl);
     if (response.status != 200) {
@@ -40,10 +42,10 @@ class SarahScribblesComic extends BaseComic {
       const { data } = await instance.get(
         `https://tubmlr.com${iframe.attribs.src}`
       );
-      imgSrc = cheerio.load(data)('img')[0].attribs.src;
+      imgSrc = cheerio.load(data)('img')[0]?.attribs.src;
     }
     return new SarahScribblesComic()
-      .withId(article.attribs.id.split('-')[1])
+      .withId(article?.attribs.id.split('-')[1])
       .withImageUrl(imgSrc)
       .withName(img?.attribs?.alt ?? "Sarah Scribbles")
       .withUrl(requestUrl);
