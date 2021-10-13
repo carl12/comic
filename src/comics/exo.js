@@ -33,7 +33,9 @@ class ExoComic extends BaseComic {
       const doc = new DOMParser({ errorHandler: { warning: null } }).parseFromString(response.data);
       const select = xpath.useNamespaces({ 'html': 'http://www.w3.org/1999/xhtml' });
       const imageNode = select('//*[@class=\'image-style-main-comic\']', doc)[0];
-
+      if (!imageNode) {
+          return null;
+      }
       // Image url
       comic.imageUrl = imageNode.getAttribute('src');
 
