@@ -14,14 +14,11 @@ const WildelifeComic = require('./wildelife');
 const XKCDComic = require('./xkcd');
 
 function GetComic(webcomic_id, comic_id) {
-  for (let i = 0; i < ComicList.length; i++) {
-    const comic = ComicList[i];
-    if (comic.getInfo().id == webcomic_id) {
+  const comic = ComicList.find(comic => comic.getInfo().id === webcomic_id);
+  if (comic) {
       return comic.getComicWithId(comic_id);
-    }
   }
   return Promise.resolve(null);
-  // throw ('comic not found');
 }
 
 function GetComicEmbed(webcomic_id, comic_id) {
