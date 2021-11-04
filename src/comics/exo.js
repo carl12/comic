@@ -3,6 +3,7 @@ const BaseComic = require('./base');
 const axios = require('axios');
 const DOMParser = require('xmldom').DOMParser;
 const xpath = require('xpath');
+const cheerio = require('cheerio');
 
 const siteUrl = 'https://www.exocomics.com/';
 
@@ -33,17 +34,20 @@ class ExoComic extends BaseComic {
       const doc = new DOMParser({ errorHandler: { warning: null } }).parseFromString(response.data);
       const select = xpath.useNamespaces({ 'html': 'http://www.w3.org/1999/xhtml' });
       const imageNode = select('//*[@class=\'image-style-main-comic\']', doc)[0];
-      if (!imageNode) {
+
+      const $ = cheerio.load(response.data);
+      const imageNode2 = $('.image-style-main-comic')[0];
+      if (!imageNode2) {
           return null;
       }
       // Image url
-      comic.imageUrl = imageNode.getAttribute('src');
+      comic.imageUrl = imageNode2.attribs.src;
 
       // Comic id
-      comic.id = imageNode.getAttribute('alt');
+      comic.id = imageNode2.attribs['alt'];
 
       // Comic title
-      const title = imageNode.getAttribute('title');
+      const title = imageNode2.attribs['title'];
       comic.name = title == '' ? comic.id : title;
 
       // Comic url

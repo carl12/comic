@@ -4,7 +4,6 @@ const axios = require('axios');
 const DOMParser = require('xmldom').DOMParser;
 const xpath = require('xpath');
 var tumblr = require('tumblr.js');
-const cheerio = require('cheerio');
 
 var client = tumblr.createClient(tumblrInfo);
 

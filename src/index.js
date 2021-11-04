@@ -52,8 +52,12 @@ async function CheckNewComics() {
 
     const latestComic = await GetComic(id, 'latest');
     const comicInfo = await GetComicInfo(id);
-
+    if (!latestComic) {
+        console.warn(`Fetching latest comic for ${comic.name} failed: ${latestComic}`);
+        continue;
+    }
     if (latestComic.id === comicInfo?.latest_id) {
+      console.info(`Already have latest ${comic.name} with id ${latestComic.id}`)
       continue;
     }
 
@@ -80,6 +84,7 @@ async function CheckNewComics() {
     }
     console.log(`Posted ${posted} subscribe updates for ${comic.getInfo().name} with id: ${latestComic.id}`);
   }
+  console.info('Done updating latest comics');
 }
 
 // Checks to see if there are any guilds that don't have a corresponding entry in the guilds collection, and adds any that are missing
