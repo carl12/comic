@@ -57,7 +57,7 @@ class LizComic extends BaseComic {
         }
 
         const comic = new LizComic();
-        const post = data.posts[0];
+        const post = data?.posts[0];
         if (!post) {
           throw (`No post found matching for id ${id}`)
         }
