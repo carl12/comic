@@ -30,7 +30,8 @@ class SarahScribblesComic extends BaseComic {
     const requestUrl = (num == 'latest') ? siteUrl : `${siteUrl}page/${num}`;
     const response = await axios.get(requestUrl);
     if (response.status != 200) {
-      throw (`http status ${response.status} for ${requestUrl}`);
+      console.warn(`http status ${response.status} for ${requestUrl}`);
+      return null;
     }
     const $ = cheerio.load(response.data);
     const article = $('article')[0];

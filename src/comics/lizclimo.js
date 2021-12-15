@@ -59,7 +59,7 @@ class LizComic extends BaseComic {
         const comic = new LizComic();
         const post = data?.posts[0];
         if (!post) {
-          throw (`No post found matching for id ${id}`)
+          resolve(null);
         }
         const firstPhotoUrl = post.photos[0].alt_sizes[1].url;
         comic.addInfo({

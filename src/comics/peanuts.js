@@ -43,7 +43,8 @@ class PeanutsComic extends BaseComic {
     const requestUrl = PeanutsComic.getUrl(rawId);
     return axios.get(requestUrl) .then(response => {
       if (response.status != 200) {
-        throw (`http status ${response.status} for ${requestUrl}`);
+        console.warn(`http status ${response.status} for ${requestUrl}`);
+        return null;
       }
       const $ = cheerio.load(response.data);
       const node = $('.img-fluid')[1];

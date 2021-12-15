@@ -21,7 +21,8 @@ class XKCDComic extends BaseComic {
     const requestUrl = (id == 'latest') ? `${siteUrl}info.0.json` : `${siteUrl}${id}/info.0.json`;
     return axios.get(requestUrl).then(function (response) {
       if (response.status != 200) {
-        throw (`http status ${response.status} for ${requestUrl}`);
+        console.warn(`http status ${response.status} for ${requestUrl}`);
+        return null;
       }
 
       const comic = new XKCDComic();

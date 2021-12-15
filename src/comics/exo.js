@@ -25,7 +25,8 @@ class ExoComic extends BaseComic {
     const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}${id}`;
     return axios.get(requestUrl).then(function (response) {
       if (response.status != 200) {
-        throw (`http status ${response.status} for ${requestUrl}`);
+        console.warn(`http status ${response.status} for ${requestUrl}`);
+        return null;
       }
 
       const comic = new ExoComic();

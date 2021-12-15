@@ -24,7 +24,8 @@ class ChannelateComic extends BaseComic {
     const requestUrl = (id == 'latest') ? siteUrl : `${siteUrl}comics/${id}`;
     const response = await axios.get(requestUrl);
     if (response.status != 200) {
-      throw (`http status ${response.status} for ${requestUrl}`);
+      console.warn(`http status ${response.status} for ${requestUrl}`);
+      return null;
     }
     const comic = new ChannelateComic();
 

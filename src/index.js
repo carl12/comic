@@ -44,9 +44,10 @@ client.on('guildCreate', async (guild) => {
 process.on('unhandledRejection', error => {
   console.error('Unhandled promise rejection:', error);
 });
-
+let errorCount = 0;
 client.setInterval(CheckNewComics, newComicCheckInterval);
 async function CheckNewComics() {
+  const start = Date.now();
   for (const comic of ComicList) {
     const id = comic.getInfo().id;
 
@@ -54,7 +55,14 @@ async function CheckNewComics() {
     const comicInfo = await GetComicInfo(id);
     if (!latestComic) {
         console.warn(`Fetching latest comic for ${comic.name} failed: ${latestComic}`);
+        errorCount ++;
+        if (errorCount > 10) {
+          console.error('Too many errors, terminating...');
+          process.exit();
+        }
         continue;
+    } else if (errorCount > 0) {
+      errorCount --;
     }
     if (latestComic.id === comicInfo?.latest_id) {
       console.info(`Already have latest ${comic.name} with id ${latestComic.id}`)
@@ -84,7 +92,7 @@ async function CheckNewComics() {
     }
     console.log(`Posted ${posted} subscribe updates for ${comic.getInfo().name} with id: ${latestComic.id}`);
   }
-  console.info('Done updating latest comics');
+  console.info('Done updating latest comics. Took ' + ((Date.now() - start)/1000).toFixed(2) + ' secs.\nDate is ' + new Date());
 }
 
 // Checks to see if there are any guilds that don't have a corresponding entry in the guilds collection, and adds any that are missing
