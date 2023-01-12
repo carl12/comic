@@ -1,5 +1,5 @@
 # Comic Bot | A Discord webcomic-sending bot
-[Invite link](): TODO
+[Invite link](https://discord.com/oauth2/authorize?client_id=824465339839938581&scope=bot&permissions=536923136)
 
 [Join the support server](): TODO
 
