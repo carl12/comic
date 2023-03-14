@@ -36,7 +36,7 @@ class SarahScribblesComic extends BaseComic {
     const $ = cheerio.load(response.data);
     const article = $('article')[0];
     const iframe = $('.photoset')[1];
-    const img = $('article a img')[0];
+    const img = $('article img')[0];
 
     let imgSrc = img?.attribs?.src;
     if (iframe != null) {
