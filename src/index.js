@@ -77,7 +77,7 @@ async function CheckNewComics() {
 
     // Get all the guilds which are subscriebd to this comic
     const guilds = await GetGuildsSubscribedTo(id);
-    const embed = await GetComicEmbed(id, latestComic.id);
+    const embed = await GetComicEmbed(id, 'latest');
 
     let posted = 0;
     for (const guild of guilds) {

@@ -21,24 +21,23 @@ function GetComic(webcomic_id, comic_id) {
   return Promise.resolve(null);
 }
 
-function GetComicEmbed(webcomic_id, comic_id) {
-  return GetComic(webcomic_id, comic_id).then(function (comic) {
-    if (!comic) {
-      return null;
-    }
-    const embed = new MessageEmbed()
-      .setColor('aqua')
-      .setTitle(comic.name)
-      .setURL(comic.url)
-      .setAuthor(comic.info.author, null, comic.info.authorUrl)
-      .setImage(comic.imageUrl);
+async function GetComicEmbed(webcomic_id, comic_id) {
+  const comic = await GetComic(webcomic_id, comic_id);
+  if (!comic) {
+    return null;
+  }
+  const embed = new MessageEmbed()
+    .setColor('aqua')
+    .setTitle(comic.name)
+    .setURL(comic.url)
+    .setAuthor(comic.info.author, null, comic.info.authorUrl)
+    .setImage(comic.imageUrl);
 
-    if (comic.bonusUrl != '') {
-      embed.addField('Bonus url', comic.bonusUrl);
-    }
+  if (comic.bonusUrl != '') {
+    embed.addField('Bonus url', comic.bonusUrl);
+  }
 
-    return embed;
-  });
+  return embed;
 }
 
 function GetWebcomic(webcomic_id) {
