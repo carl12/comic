@@ -53,13 +53,15 @@ class LizComic extends BaseComic {
     return new Promise(async function (resolve, reject) {
       client.blogPosts('lizclimo.tumblr.com', options, (err, data) => {
         if (err) {
-          reject(`Error getting blog: ${err}`)
+          reject(`Error getting blog: ${err}`);
+          return;
         }
 
         const comic = new LizComic();
         const post = data?.posts[0];
         if (!post) {
-          resolve(null);
+          reject('Failed to get lizclimo post from data');
+          return;
         }
         const firstPhotoUrl = post.photos[0].alt_sizes[1].url;
         comic.addInfo({
