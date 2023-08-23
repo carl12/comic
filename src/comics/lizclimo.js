@@ -63,7 +63,7 @@ class LizComic extends BaseComic {
           reject('Failed to get lizclimo post from data');
           return;
         }
-        const firstPhotoUrl = post.photos[0].alt_sizes[1].url;
+        const firstPhotoUrl = post.photos?.[0].alt_sizes[1].url;
         comic.addInfo({
           imageUrl: firstPhotoUrl,
           name: post.summary,
