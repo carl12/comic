@@ -8,7 +8,7 @@ const path = require('path');
 const { GetComic, GetComicEmbed, ComicList, RegisterComics } = require('../src/comics/comics');
 const { GetComicInfo, GetGuildInfo, GetGuildInfoAll, AddGuildInfo, ModifyComicInfo, GetGuildsSubscribedTo } = require('../src/database');
 
-const newComicCheckInterval = 5 * 60 * 1000; // 5 minutes
+const newComicCheckInterval = 30 * 60 * 1000; // 30 minutes
 
 Database.ConnectDatabse(config.connectUri).then(async () => {
   await client.login(config.token);
