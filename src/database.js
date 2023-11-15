@@ -5,7 +5,7 @@ const data = {
   db: undefined,
 };
 
-function AddComicInfo(comicId) {
+function addComicInfo(comicId) {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -16,7 +16,7 @@ function AddComicInfo(comicId) {
   });
 }
 
-function AddGuildInfo(guildId) {
+function addGuildInfo(guildId) {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -29,7 +29,7 @@ function AddGuildInfo(guildId) {
   });
 }
 
-function ClearCollection(name) {
+function clearCollection(name) {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -37,7 +37,7 @@ function ClearCollection(name) {
   return data.db.collection(name).deleteMany();
 }
 
-function ConnectDatabse(connectUri, db) {
+function connectDatabse(connectUri, db) {
   if (data.client != undefined) {
     throw (Error('database is already connected'));
   }
@@ -50,7 +50,7 @@ function ConnectDatabse(connectUri, db) {
   });
 }
 
-function GetComicInfo(comicId) {
+function getSavedComic(comicId) {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -58,7 +58,7 @@ function GetComicInfo(comicId) {
   return data.db.collection('comics').findOne({ 'comic_id': comicId });
 }
 
-function GetComicInfoAll() {
+function getSavedComicAll() {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -66,7 +66,7 @@ function GetComicInfoAll() {
   return data.db.collection('comics').find().toArray();
 }
 
-function GetGuildInfo(guildId) {
+function getGuildInfo(guildId) {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -74,7 +74,7 @@ function GetGuildInfo(guildId) {
   return data.db.collection('guilds').findOne({ 'guild_id': guildId });
 }
 
-function GetGuildInfoAll() {
+function getGuildInfoAll() {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -82,7 +82,7 @@ function GetGuildInfoAll() {
   return data.db.collection('guilds').find().toArray();
 }
 
-function GetGuildsSubscribedTo(comicId) {
+function getGuildsSubscribedTo(comicId) {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -90,17 +90,17 @@ function GetGuildsSubscribedTo(comicId) {
   return data.db.collection('guilds').find({ subscribed_comics: comicId }).toArray();
 }
 
-function GetGuildComicChannel(guildId) {
+function getGuildComicChannel(guildId) {
   return data.db.collection('guilds').findOne({ guild_id: guildId }).then(
     entry => entry.comic_channel
   );
 }
 
-function IsConnected() {
+function isConnected() {
   return data.client.isConnected();
 }
 
-function ModifyComicInfo(comicId, props) {
+function updateWebComicInfo(comicId, props) {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -108,7 +108,7 @@ function ModifyComicInfo(comicId, props) {
   return data.db.collection('comics').findOneAndUpdate({ 'comic_id': comicId }, { $set: props });
 }
 
-function ModifyGuildInfo(guildId, props) {
+function modifyGuildInfo(guildId, props) {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -116,7 +116,7 @@ function ModifyGuildInfo(guildId, props) {
   return data.db.collection('guilds').findOneAndUpdate({ 'guild_id': guildId }, { $set: props });
 }
 
-function SubscribeComic(guildId, comicId) {
+function subscribeComic(guildId, comicId) {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -124,7 +124,7 @@ function SubscribeComic(guildId, comicId) {
   return data.db.collection('guilds').findOneAndUpdate({ 'guild_id': guildId }, { $addToSet: { subscribed_comics: comicId } });
 }
 
-function UnsubscribeComic(guildId, comicId) {
+function unsubscribeComic(guildId, comicId) {
   if (data.db == undefined) {
     throw (Error('not connected to database'));
   }
@@ -133,19 +133,19 @@ function UnsubscribeComic(guildId, comicId) {
 }
 
 module.exports = {
-  AddComicInfo,
-  AddGuildInfo,
-  ClearCollection,
-  ConnectDatabse,
-  GetComicInfo,
-  GetComicInfoAll,
-  GetGuildComicChannel,
-  GetGuildInfo,
-  GetGuildInfoAll,
-  GetGuildsSubscribedTo,
-  IsConnected,
-  ModifyComicInfo,
-  ModifyGuildInfo,
-  SubscribeComic,
-  UnsubscribeComic,
+  addComicInfo,
+  addGuildInfo,
+  clearCollection,
+  connectDatabse,
+  getSavedComic,
+  getSavedComicAll,
+  getGuildComicChannel,
+  getGuildInfo,
+  getGuildInfoAll,
+  getGuildsSubscribedTo,
+  isConnected,
+  updateWebComicInfo,
+  modifyGuildInfo,
+  subscribeComic,
+  unsubscribeComic,
 };

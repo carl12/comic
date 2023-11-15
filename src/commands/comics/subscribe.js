@@ -1,9 +1,9 @@
 const { Command } = require('discord.js-commando');
-const { GetWebcomic } = require('../../comics/comics');
+const { getWebcomic } = require('../../comics/webComics');
 const { SubscribeComic, GetGuildComicChannel, GetGuildInfo } = require('../../database');
 const config = require('../../../config.json');
 const { client } = require('../../utility/botUtils');
-const { GetComicEmbed, GetComic } = require('../../comics/comics');
+const { getComicEmbed, fetchComic } = require('../../comics/webComics');
 
 module.exports = class SubscribeCommand extends Command {
   constructor(client) {
@@ -25,7 +25,7 @@ module.exports = class SubscribeCommand extends Command {
 
   async run(message, { webcomic_id }) {
     const comicId = webcomic_id.split(' ')[0];
-    const webcomic = GetWebcomic(comicId);
+    const webcomic = getWebcomic(comicId);
     if (!webcomic) {
       message.reply(`Sorry, there is no comic with the id ${comicId}`);
       return;
@@ -42,8 +42,8 @@ module.exports = class SubscribeCommand extends Command {
       message.reply('Please set a channel id for comics subscriptions');
       return;
     }
-    const latestComic = await GetComic(webcomic.getInfo().id, 'latest');
-    const embed = await GetComicEmbed(webcomic.getInfo().id, latestComic.id);
+    const latestComic = await fetchComic(webcomic.getInfo().id, 'latest');
+    const embed = await getComicEmbed(webcomic.getInfo().id, latestComic.id);
     const channel = await client.channels.fetch(comic_channel);
     channel.send(`New ${webcomic.getInfo().name} comic!`);
     channel.send(embed);

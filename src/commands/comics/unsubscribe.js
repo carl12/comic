@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { GetWebcomic } = require('../../comics/comics');
+const { getWebcomic } = require('../../comics/webComics');
 const { UnsubscribeComic } = require('../../database');
 
 module.exports = class UnsubscribeCommand extends Command {
@@ -21,7 +21,7 @@ module.exports = class UnsubscribeCommand extends Command {
   }
 
   async run(message, { webcomic_id }) {
-    const webcomic = GetWebcomic(webcomic_id);
+    const webcomic = getWebcomic(webcomic_id);
     if (!webcomic) {
       return message.reply(`Sorry, there is no comic with the id ${webcomic_id}`);
     }

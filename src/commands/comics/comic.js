@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { GetComicEmbed } = require('../../comics/comics');
+const { getComicEmbed } = require('../../comics/webComics');
 
 module.exports = class ComicCommand extends Command {
   constructor(client) {
@@ -25,7 +25,7 @@ module.exports = class ComicCommand extends Command {
   }
 
   run(message, { webcomic_id, comic_id }) {
-    GetComicEmbed(webcomic_id, comic_id).then(embed => {
+    getComicEmbed(webcomic_id, comic_id).then(embed => {
       if (!embed) {
         return message.channel.send(`Comic with id ${webcomic_id} not found`);
       }

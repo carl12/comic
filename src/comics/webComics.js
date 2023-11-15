@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { AddComicInfo, GetComicInfoAll } = require('../database');
+const { addComicInfo: AddComicInfo, getSavedComicAll: GetComicInfoAll } = require('../database');
 
 const ChannelateComic = require('./channelate');
 const CyanideComic = require('./cyanide');
@@ -13,16 +13,16 @@ const WhiteNoiseComic = require('./whitenoise');
 const WildelifeComic = require('./wildelife');
 const XKCDComic = require('./xkcd');
 
-function GetComic(webcomic_id, comic_id) {
-  const comic = ComicList.find(comic => comic.getInfo().id === webcomic_id);
+function fetchComic(webcomic_id, comic_id) {
+  const comic = webComicList.find(comic => comic.getInfo().id === webcomic_id);
   if (comic) {
       return comic.getComicWithId(comic_id);
   }
   return Promise.resolve(null);
 }
 
-async function GetComicEmbed(webcomic_id, comic_id) {
-  const comic = await GetComic(webcomic_id, comic_id);
+async function getComicEmbed(webcomic_id, comic_id) {
+  const comic = await fetchComic(webcomic_id, comic_id);
   if (!comic) {
     return null;
   }
@@ -40,16 +40,16 @@ async function GetComicEmbed(webcomic_id, comic_id) {
   return embed;
 }
 
-function GetWebcomic(webcomic_id) {
-  return ComicList.find(comic => comic.getInfo().id === webcomic_id);
+function getWebcomic(webcomic_id) {
+  return webComicList.find(comic => comic.getInfo().id === webcomic_id);
 }
 
-async function RegisterComics() {
+async function registerComics() {
   const comicInfos = await GetComicInfoAll();
 
-  ComicList.forEach(function (comic) {
+  webComicList.forEach(function(comic) {
     const id = comic.getInfo().id;
-    if (!comicInfos.some(function (e) {
+    if (!comicInfos.some(function(e) {
       return id === e.comic_id;
     })) {
       AddComicInfo(id);
@@ -57,7 +57,7 @@ async function RegisterComics() {
   });
 }
 
-const ComicList = [
+const webComicList = [
   ChannelateComic,
   CyanideComic,
   ExoComic,
@@ -68,13 +68,13 @@ const ComicList = [
   WhiteNoiseComic,
   WildelifeComic,
   XKCDComic,
-  SarahScribblesComic
+  SarahScribblesComic,
 ];
 
 module.exports = {
-  GetComic,
-  GetComicEmbed,
-  GetWebcomic,
-  RegisterComics,
-  ComicList,
+  fetchComic,
+  getComicEmbed,
+  getWebcomic,
+  registerComics,
+  webComicList,
 };

@@ -5,15 +5,15 @@ const { client } = require('./utility/botUtils');
 
 const path = require('path');
 
-const { GetComic, GetComicEmbed, ComicList, RegisterComics } = require('../src/comics/comics');
-const { GetComicInfo, GetGuildInfo, GetGuildInfoAll, AddGuildInfo, ModifyComicInfo, GetGuildsSubscribedTo } = require('../src/database');
+const { fetchComic, getComicEmbed, webComicList, registerComics } = require('./comics/webComics');
+const { getSavedComic, getGuildInfo, getGuildInfoAll, addGuildInfo, updateWebComicInfo, getGuildsSubscribedTo } = require('../src/database');
 
 const newComicCheckInterval = 30 * 60 * 1000; // 30 minutes
 
-Database.ConnectDatabse(config.connectUri).then(async () => {
+Database.connectDatabse(config.connectUri).then(async () => {
   await client.login(config.token);
-  await RegisterComics();
-  await CheckNewComics();
+  await registerComics();
+  await checkNewComics();
 });
 
 client.registry
@@ -34,10 +34,10 @@ client.on('guildCreate', async (guild) => {
   // Check if we already have info for this guild
 
   console.log('Joined guild ' + guild.id);
-  const guildInfo = await GetGuildInfo(guild.id);
+  const guildInfo = await getGuildInfo(guild.id);
 
   if (guildInfo === null) {
-    AddGuildInfo(guild.id);
+    addGuildInfo(guild.id);
   }
 });
 
@@ -45,16 +45,16 @@ process.on('unhandledRejection', error => {
   console.error('Unhandled promise rejection:', error);
 });
 let errorCount = 0;
-client.setInterval(CheckNewComics, newComicCheckInterval);
-async function CheckNewComics() {
+client.setInterval(checkNewComics, newComicCheckInterval);
+async function checkNewComics() {
   const start = Date.now();
-  for (const comic of ComicList) {
-    const id = comic.getInfo().id;
+  for (const webComic of webComicList) {
+    const webComicId = webComic.getInfo().id;
 
-    const latestComic = await GetComic(id, 'latest');
-    const comicInfo = await GetComicInfo(id);
+    const latestComic = await fetchComic(webComicId, 'latest');
+    const latestSavedComic = await getSavedComic(webComicId);
     if (!latestComic) {
-        console.warn(`Fetching latest comic for ${comic.name} failed: ${latestComic}`);
+        console.warn(`Fetching latest comic for ${webComic.name} failed: ${latestComic}`);
         errorCount ++;
         if (errorCount > 10) {
           console.error('Too many errors, terminating...');
@@ -64,20 +64,20 @@ async function CheckNewComics() {
     } else if (errorCount > 0) {
       errorCount --;
     }
-    if (latestComic.id === comicInfo?.latest_id) {
-      console.info(`Already have latest ${comic.name} with id ${latestComic.id}`)
+    if (latestComic.id === latestSavedComic?.latest_id) {
+      console.info(`Already have latest ${webComic.name} with id ${latestComic.id}`)
       continue;
     }
 
-    const res = await ModifyComicInfo(id, { latest_id: latestComic.id });
+    const res = await updateWebComicInfo(webComicId, { latest_id: latestComic.id });
 
     if (res.ok !== 1) {
       throw (Error('failed to update latest comic'));
     }
 
     // Get all the guilds which are subscriebd to this comic
-    const guilds = await GetGuildsSubscribedTo(id);
-    const embed = await GetComicEmbed(id, 'latest');
+    const guilds = await getGuildsSubscribedTo(webComicId);
+    const embed = await getComicEmbed(webComicId, 'latest');
 
     let posted = 0;
     for (const guild of guilds) {
@@ -86,23 +86,23 @@ async function CheckNewComics() {
       }
       // Send comic
       const channel = await client.channels.fetch(guild.comic_channel);
-      channel.send(`New ${comic.getInfo().name} comic!`);
+      channel.send(`New ${webComic.getInfo().name} comic!`);
       channel.send(embed);
       posted ++;
     }
-    console.log(`Posted ${posted} subscribe updates for ${comic.getInfo().name} with id: ${latestComic.id}`);
+    console.log(`Posted ${posted} subscribe updates for ${webComic.getInfo().name} with id: ${latestComic.id}`);
   }
   console.info('Done updating latest comics. Took ' + ((Date.now() - start)/1000).toFixed(2) + ' secs.\nDate is ' + new Date());
 }
 
 // Checks to see if there are any guilds that don't have a corresponding entry in the guilds collection, and adds any that are missing
 async function CheckNewGuilds() {
-  const guildInfos = await GetGuildInfoAll();
+  const guildInfos = await getGuildInfoAll();
 
   client.guilds.cache.forEach(function (guild) {
     if (!guildInfos.some(e => guild.id = e.guild_id)) {
       // Add guild info
-      AddGuildInfo(guild.id);
+      addGuildInfo(guild.id);
     }
   });
 }
