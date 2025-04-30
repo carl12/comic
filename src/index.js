@@ -5,7 +5,7 @@ const { client } = require('./utility/botUtils');
 
 const path = require('path');
 
-const { fetchComic, getComicEmbed, webComicList, registerComics } = require('./comics/webComics');
+const { fetchComic, getComicEmbed, webComicList, registerComics, getComicImageUrl } = require('./comics/webComics');
 const { getSavedComic, getGuildInfo, getGuildInfoAll, addGuildInfo, updateWebComicInfo, getGuildsSubscribedTo } = require('../src/database');
 
 const newComicCheckInterval = 30 * 60 * 1000; // 30 minutes
@@ -78,6 +78,7 @@ async function checkNewComics() {
     // Get all the guilds which are subscriebd to this comic
     const guilds = await getGuildsSubscribedTo(webComicId);
     const embed = await getComicEmbed(webComicId, 'latest');
+    const imgUrl = await getComicImageUrl(webComicId, 'latest');
 
     let posted = 0;
     for (const guild of guilds) {
@@ -88,6 +89,7 @@ async function checkNewComics() {
       const channel = await client.channels.fetch(guild.comic_channel);
       channel.send(`New ${webComic.getInfo().name} comic!`);
       channel.send(embed);
+      channel.send(imgUrl);
       posted ++;
     }
     console.log(`Posted ${posted} subscribe updates for ${webComic.getInfo().name} with id: ${latestComic.id}`);

@@ -40,6 +40,11 @@ async function getComicEmbed(webcomic_id, comic_id) {
   return embed;
 }
 
+async function getComicImageUrl(webcomic_id, comic_id) {
+  const comic = await fetchComic(webcomic_id, comic_id);
+  return comic.imageUrl;
+}
+
 function getWebcomic(webcomic_id) {
   return webComicList.find(comic => comic.getInfo().id === webcomic_id);
 }
@@ -74,6 +79,7 @@ const webComicList = [
 module.exports = {
   fetchComic,
   getComicEmbed,
+  getComicImageUrl,
   getWebcomic,
   registerComics,
   webComicList,
