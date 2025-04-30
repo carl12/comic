@@ -50,8 +50,8 @@ class PeanutsComic extends BaseComic {
       const node = $('.img-fluid')[1];
 
       return new PeanutsComic()
-        .withId(node.attribs.alt)
-        .withImageUrl(node.attribs.src)
+        .withId(node?.attribs.alt)
+        .withImageUrl(node?.attribs.src)
         .withName("Peanuts")
         .withUrl(requestUrl);
     });
