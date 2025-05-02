@@ -48,12 +48,13 @@ let errorCount = 0;
 client.setInterval(checkNewComics, newComicCheckInterval);
 async function checkNewComics() {
   const start = Date.now();
+  let latestComic;
   for (const webComic of webComicList) {
     const error = null;
     const webComicId = webComic.getInfo().id;
     try {
 
-      const latestComic = await fetchComic(webComicId, 'latest');
+      latestComic = await fetchComic(webComicId, 'latest');
       const latestSavedComic = await getSavedComic(webComicId);
       if (!latestComic) {
           console.warn(`Fetching latest comic for ${webComic.name} failed: ${latestComic}`);
@@ -99,7 +100,11 @@ async function checkNewComics() {
       channel.send(imgUrl);
       posted ++;
     }
-    console.log(`Posted ${posted} subscribe updates for ${webComic.getInfo().name} with id: ${latestComic.id}`);
+    if (error) {
+      console.log(`Posted ${posted} fail updates for ${webComic.getInfo().name} with id: ${latestComic?.id}`);
+    } else {
+      console.log(`Posted ${posted} subscribe updates for ${webComic.getInfo().name} with id: ${latestComic?.id}`);
+    }
   }
   console.info('Done updating latest comics. Took ' + ((Date.now() - start)/1000).toFixed(2) + ' secs.\nDate is ' + new Date());
 }
