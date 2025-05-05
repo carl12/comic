@@ -1,11 +1,11 @@
-const BaseComic = require('./base.ts');
+import BaseComic from './base.ts';
 
-const axios = require('axios');
-const xpath = require('xpath');
-const cheerio = require('cheerio');
+import axios from 'axios';
+import xpath from 'xpath';
+import cheerio from 'cheerio';
 const siteUrl = 'https://www.channelate.com/';
 
-class ChannelateComic extends BaseComic {
+export default class ChannelateComic extends BaseComic {
   constructor() {
     super();
   }
@@ -47,5 +47,3 @@ class ChannelateComic extends BaseComic {
     return new ChannelateComic().info;
   }
 }
-
-module.exports = ChannelateComic;

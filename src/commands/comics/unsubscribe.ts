@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando');
 const { getWebcomic } = require('../../comics/webComics');
 const { UnsubscribeComic } = require('../../database.ts');
 
-module.exports = class UnsubscribeCommand extends Command {
+export default class UnsubscribeCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'unsubscribe',

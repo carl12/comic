@@ -1,16 +1,16 @@
-const BaseComic = require('./base.ts');
-const { tumblrInfo } = require('../../config.json');
-const axios = require('axios');
-const DOMParser = require('xmldom').DOMParser;
-const xpath = require('xpath');
-var tumblr = require('tumblr.js');
-
+import BaseComic from './base.ts';
+import config from '../../config.json' with { type: "json" };
+import axios from 'axios';
+import { DOMParser } from 'xmldom';
+import xpath from 'xpath';
+import tumblr from 'tumblr.js';
+const tumblrInfo = config.tumblrInfo;
 var client = tumblr.createClient(tumblrInfo);
 
 
 const siteUrl = 'https://lizclimo.tumblr.com/';
 
-class LizComic extends BaseComic {
+export default class LizComic extends BaseComic {
   constructor() {
     super();
   }
@@ -80,5 +80,3 @@ class LizComic extends BaseComic {
     return new LizComic().info;
   }
 }
-
-module.exports = LizComic;

@@ -1,17 +1,17 @@
-const { MessageEmbed } = require('discord.js');
-const { addComicInfo: AddComicInfo, getSavedComicAll: GetComicInfoAll } = require('../database.ts');
+import { MessageEmbed } from 'discord.js';
+import { addComicInfo, getSavedComicAll } from '../database.ts';
 
-const ChannelateComic = require('./channelate.ts');
-const CyanideComic = require('./cyanide.ts');
-const ExoComic = require('./exo.ts');
-const LizComic = require('./lizclimo.ts');
-const PeanutsComic = require('./peanuts.ts');
-const SarahScribblesComic = require('./sarahscribbles.ts');
-const SMBCComic = require('./smbc.ts');
-const SwordsComic = require('./swords.ts');
-const WhiteNoiseComic = require('./whitenoise.ts');
-const WildelifeComic = require('./wildelife.ts');
-const XKCDComic = require('./xkcd.ts');
+import ChannelateComic from './channelate.ts';
+import CyanideComic from './cyanide.ts';
+import ExoComic from './exo.ts';
+import LizComic from './lizclimo.ts';
+import PeanutsComic from './peanuts.ts';
+import SarahScribblesComic from './sarahscribbles.ts';
+import SMBCComic from './smbc.ts';
+import SwordsComic from './swords.ts';
+import WhiteNoiseComic from './whitenoise.ts';
+import WildelifeComic from './wildelife.ts';
+import XKCDComic from './xkcd.ts';
 
 function fetchComic(webcomic_id, comic_id) {
   const comic = webComicList.find(c => c.getInfo().id === webcomic_id);
@@ -50,14 +50,14 @@ function getWebcomic(webcomic_id) {
 }
 
 async function registerComics() {
-  const comicInfos = await GetComicInfoAll();
+  const comicInfos = await getSavedComicAll();
 
   webComicList.forEach(function(comic) {
     const id = comic.getInfo().id;
     if (!comicInfos.some(function(e) {
       return id === e.comic_id;
     })) {
-      AddComicInfo(id);
+      addComicInfo(id);
     }
   });
 }
@@ -76,7 +76,7 @@ const webComicList = [
   SarahScribblesComic,
 ];
 
-module.exports = {
+export {
   fetchComic,
   getComicEmbed,
   getComicImageUrl,

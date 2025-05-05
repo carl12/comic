@@ -1,7 +1,7 @@
 const { Command } = require('discord.js-commando');
 const { getComicEmbed } = require('../../comics/webComics');
 
-module.exports = class ComicCommand extends Command {
+export default class ComicCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'comic',

@@ -1,10 +1,10 @@
-const BaseComic = require('./base.ts');
-const cheerio = require('cheerio');
-const axios = require('axios');
+import BaseComic from './base.ts';
+import cheerio from 'cheerio';
+import axios from 'axios';
 
 const siteUrl = 'https://www.gocomics.com/peanuts/';
 
-class PeanutsComic extends BaseComic {
+export default class PeanutsComic extends BaseComic {
   constructor() {
     super();
   }
@@ -61,5 +61,3 @@ class PeanutsComic extends BaseComic {
     return new PeanutsComic().info;
   }
 }
-
-module.exports = PeanutsComic;

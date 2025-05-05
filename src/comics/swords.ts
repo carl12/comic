@@ -1,10 +1,10 @@
-const BaseComic = require('./base.ts');
+import BaseComic from './base.ts';
 
-const axios = require('axios');
+import axios from 'axios';
 
 const siteUrl = 'https://swordscomic.com/';
 
-class SwordsComic extends BaseComic {
+export default class SwordsComic extends BaseComic {
   constructor() {
     super();
   }
@@ -50,5 +50,3 @@ class SwordsComic extends BaseComic {
     return new SwordsComic().info;
   }
 }
-
-module.exports = SwordsComic;

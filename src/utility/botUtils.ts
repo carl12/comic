@@ -1,8 +1,9 @@
-const { Permissions } = require('discord.js');
-const { CommandoClient } = require('discord.js-commando');
-const config = require('../../config.json');
 
-const client = new CommandoClient({
+import { Permissions } from 'discord.js';
+import { Client } from 'discord.js-commando';
+import config from '../../config.json' with { type: "json" };
+
+const client = new Client({
   commandPrefix: config.commandPrefix,
   owner: config.owner,
   invite: config.invite,
@@ -13,7 +14,7 @@ function hasPerms(message) {
   return guildMember.hasPermission(Permissions.FLAGS.ADMINISTRATOR);
 }
 
-module.exports = {
+export {
   hasPerms,
   client
 };

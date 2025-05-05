@@ -1,6 +1,6 @@
-const MongoClient = require('mongodb').MongoClient;
-
-const data = {
+import connect from 'mongodb';
+const { MongoClient } = connect;
+const data: { client: typeof MongoClient, db: any } = {
   client: undefined,
   db: undefined,
 };
@@ -37,7 +37,7 @@ function clearCollection(name) {
   return data.db.collection(name).deleteMany();
 }
 
-function connectDatabse(connectUri, db) {
+function connectDatabse(connectUri, db?) {
   if (data.client != undefined) {
     throw (Error('database is already connected'));
   }
@@ -132,7 +132,7 @@ function unsubscribeComic(guildId, comicId) {
   return data.db.collection('guilds').findOneAndUpdate({ 'guild_id': guildId }, { $pull: { subscribed_comics: comicId } });
 }
 
-module.exports = {
+export {
   addComicInfo,
   addGuildInfo,
   clearCollection,

@@ -1,12 +1,12 @@
-const BaseComic = require('./base.ts');
+import BaseComic from './base.ts';
 
-const axios = require('axios');
-const DOMParser = require('xmldom').DOMParser;
-const xpath = require('xpath');
+import axios from 'axios';
+import { DOMParser } from 'xmldom';
+import xpath from 'xpath';
 
 const siteUrl = 'https://explosm.net/';
 
-class CyanideComic extends BaseComic {
+export default class CyanideComic extends BaseComic {
   constructor() {
     super();
   }
@@ -67,4 +67,3 @@ class CyanideComic extends BaseComic {
   }
 }
 
-module.exports = CyanideComic;

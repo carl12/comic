@@ -1,20 +1,33 @@
-class BaseComic {
-  constructor() {
-    this.id = '';
-    this.name = '';
-    this.url = '';
-    this.imageUrl = '';
-    this.bonusUrl = '';
+type Info = {
+  id: string;
+  name: string;
+  author: string;
+  authorUrl: string;
+};
 
+export default class BaseComic {
+  public id = '';
+  public name = '';
+  public url = '';
+  public imageUrl = '';
+  public bonusUrl = '';
+  public info = {
+    id: 'Base',
+    name: 'Base',
+    author: 'John Doe',
+    authorUrl: 'https://example.com',
+  };
+  constructor() {
     this.setDefaultInfo();
   }
 
   setDefaultInfo() {
-    this.info = {};
-    this.info.id = 'base';
-    this.info.name = 'Base';
-    this.info.author = 'John Doe';
-    this.info.authorUrl = 'https://example.com';
+    this.info = {
+      id: 'Base',
+      name: 'Base',
+      author: 'John Doe',
+      authorUrl: 'https://example.com',
+    };
   }
 
   withId(id) {
@@ -71,4 +84,3 @@ class BaseComic {
   }
 }
 
-module.exports = BaseComic;

@@ -1,11 +1,11 @@
-const { Command } = require('discord.js-commando');
-const { getWebcomic } = require('../../comics/webComics');
-const { SubscribeComic, GetGuildComicChannel, GetGuildInfo } = require('../../database.ts');
-const config = require('../../../config.json');
-const { client } = require('../../utility/botUtils');
-const { getComicEmbed, fetchComic } = require('../../comics/webComics');
+import { Command } from 'discord.js-commando';
+import { getWebcomic } from '../../comics/webComics';
+import { subscribeComic, getGuildComicChannel, getGuildInfo } from '../../database.ts';
+import config from '../../../config.json' with { type: "json" };;
+import { client } from '../../utility/botUtils';
+import { getComicEmbed, fetchComic } from '../../comics/webComics';
 
-module.exports = class SubscribeCommand extends Command {
+export default class SubscribeCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'subscribe',
@@ -30,14 +30,14 @@ module.exports = class SubscribeCommand extends Command {
       message.reply(`Sorry, there is no comic with the id ${comicId}`);
       return;
     }
-    const res = await SubscribeComic(message.guild.id, comicId);
+    const res = await subscribeComic(message.guild.id, comicId);
     if (!res.ok) {
       message.reply('Something went wrong.');
       return;
     }
     message.reply(`Subscribed to ${webcomic.getInfo().name}`);
     console.log(`Added subscription for ${webcomic_id}`);
-    const { comic_channel } = await GetGuildInfo(message.guild.id);
+    const { comic_channel } = await getGuildInfo(message.guild.id);
     if (!comic_channel) {
       message.reply('Please set a channel id for comics subscriptions');
       return;

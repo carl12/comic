@@ -1,13 +1,13 @@
-const BaseComic = require('./base.ts');
+import BaseComic from './base.ts';
 
-const axios = require('axios');
-const DOMParser = require('xmldom').DOMParser;
-const xpath = require('xpath');
-const cheerio = require('cheerio');
+import axios from 'axios';
+import { DOMParser } from 'xmldom';
+import xpath from 'xpath';
+import cheerio from 'cheerio';
 
 const siteUrl = 'https://www.exocomics.com/';
 
-class ExoComic extends BaseComic {
+export default class ExoComic extends BaseComic {
   constructor() {
     super();
   }
@@ -62,5 +62,3 @@ class ExoComic extends BaseComic {
     return new ExoComic().info;
   }
 }
-
-module.exports = ExoComic;

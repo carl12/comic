@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "At its core, Comic Bot acts as the comic section of a newspaper. You can subscribe to webcomics, and whenever a new webcomic is posted on a subscribed site it will be automatically sent to a specified channel.",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore . ",
     "test": "mocha",

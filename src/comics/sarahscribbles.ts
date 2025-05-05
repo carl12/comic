@@ -1,7 +1,7 @@
-const BaseComic = require('./base.ts');
-const cheerio = require('cheerio');
-const axios = require('axios');
-const https = require('https');
+import BaseComic from './base.ts';
+import cheerio from 'cheerio';
+import axios from 'axios';
+import https from 'https';
 
 const siteUrl = 'https://sarahcandersen.com/';
 const instance = axios.create({
@@ -9,7 +9,7 @@ const instance = axios.create({
     rejectUnauthorized: false
   })
 });
-class SarahScribblesComic extends BaseComic {
+export default class SarahScribblesComic extends BaseComic {
   constructor() {
     super();
   }
@@ -56,5 +56,3 @@ class SarahScribblesComic extends BaseComic {
     return new SarahScribblesComic().info;
   }
 }
-
-module.exports = SarahScribblesComic;

@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando');
 const { GetGuildInfo, ModifyGuildInfo } = require('../../database.ts');
 const { hasPerms } = require('../../utility/botUtils');
 
-module.exports = class UnsubscribeCommand extends Command {
+export default class UnsubscribeCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'channel',

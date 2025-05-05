@@ -1,16 +1,19 @@
-const config = require('../config.json');
+import config from '../config.json' with { type: "json" };
 
-const Database = require('../src/database.ts');
-const { getSavedComic, getGuildInfo, getGuildInfoAll, addGuildInfo, updateWebComicInfo, getGuildsSubscribedTo } = Database;
-const { client } = require('./utility/botUtils.ts');
 
-const path = require('path');
+import { getSavedComic, getGuildInfo, getGuildInfoAll, addGuildInfo, updateWebComicInfo, getGuildsSubscribedTo, connectDatabse } from '../src/database.ts';
+import { client } from './utility/botUtils.ts';
 
-const { fetchComic, getComicEmbed, webComicList, registerComics, getComicImageUrl } = require('./comics/webComics.ts');
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
+
+import { fetchComic, getComicEmbed, webComicList, registerComics, getComicImageUrl } from './comics/webComics.ts';
 
 const newComicCheckInterval = 30 * 60 * 1000; // 30 minutes
 
-Database.connectDatabse(config.connectUri).then(async () => {
+connectDatabse(config.connectUri).then(async () => {
   await client.login(config.token);
   await registerComics();
   await checkNewComics();
@@ -26,7 +29,7 @@ client.registry
   .registerCommandsIn(path.join(__dirname, 'commands'));
 
 client.once('ready', () => {
-  console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
+  console.log(`Logged in as ${client.user!.tag}! (${client.user!.id})`);
   CheckNewGuilds();
 });
 

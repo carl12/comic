@@ -1,10 +1,10 @@
-const BaseComic = require('./base.ts');
+import BaseComic from './base.ts';
 
-const axios = require('axios');
+import axios from 'axios';
 
 const siteUrl = 'https://xkcd.com/';
 
-class XKCDComic extends BaseComic {
+export default class XKCDComic extends BaseComic {
   constructor() {
     super();
   }
@@ -43,5 +43,3 @@ class XKCDComic extends BaseComic {
     return new XKCDComic().info;
   }
 }
-
-module.exports = XKCDComic;
