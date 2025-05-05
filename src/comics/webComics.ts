@@ -1,20 +1,20 @@
 const { MessageEmbed } = require('discord.js');
-const { addComicInfo: AddComicInfo, getSavedComicAll: GetComicInfoAll } = require('../database');
+const { addComicInfo: AddComicInfo, getSavedComicAll: GetComicInfoAll } = require('../database.ts');
 
-const ChannelateComic = require('./channelate');
-const CyanideComic = require('./cyanide');
-const ExoComic = require('./exo');
-const LizComic = require('./lizclimo');
-const PeanutsComic = require('./peanuts');
-const SarahScribblesComic = require('./sarahscribbles');
-const SMBCComic = require('./smbc');
-const SwordsComic = require('./swords');
-const WhiteNoiseComic = require('./whitenoise');
-const WildelifeComic = require('./wildelife');
-const XKCDComic = require('./xkcd');
+const ChannelateComic = require('./channelate.ts');
+const CyanideComic = require('./cyanide.ts');
+const ExoComic = require('./exo.ts');
+const LizComic = require('./lizclimo.ts');
+const PeanutsComic = require('./peanuts.ts');
+const SarahScribblesComic = require('./sarahscribbles.ts');
+const SMBCComic = require('./smbc.ts');
+const SwordsComic = require('./swords.ts');
+const WhiteNoiseComic = require('./whitenoise.ts');
+const WildelifeComic = require('./wildelife.ts');
+const XKCDComic = require('./xkcd.ts');
 
 function fetchComic(webcomic_id, comic_id) {
-  const comic = webComicList.find(comic => comic.getInfo().id === webcomic_id);
+  const comic = webComicList.find(c => c.getInfo().id === webcomic_id);
   if (comic) {
       return comic.getComicWithId(comic_id);
   }

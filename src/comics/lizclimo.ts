@@ -1,4 +1,4 @@
-const BaseComic = require('./base');
+const BaseComic = require('./base.ts');
 const { tumblrInfo } = require('../../config.json');
 const axios = require('axios');
 const DOMParser = require('xmldom').DOMParser;

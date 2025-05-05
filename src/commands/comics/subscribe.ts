@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const { getWebcomic } = require('../../comics/webComics');
-const { SubscribeComic, GetGuildComicChannel, GetGuildInfo } = require('../../database');
+const { SubscribeComic, GetGuildComicChannel, GetGuildInfo } = require('../../database.ts');
 const config = require('../../../config.json');
 const { client } = require('../../utility/botUtils');
 const { getComicEmbed, fetchComic } = require('../../comics/webComics');

@@ -1,4 +1,4 @@
-const BaseComic = require('./base');
+const BaseComic = require('./base.ts');
 const cheerio = require('cheerio');
 const axios = require('axios');
 

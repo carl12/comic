@@ -6,7 +6,7 @@ chai.use(chaiSubset);
 const expect = chai.expect;
 
 const config = require('../config.json');
-const Database = require('../src/database');
+const Database = require('../src/database.ts');
 
 describe('Database testing', function() {
     this.timeout(5000);

@@ -1,7 +1,6 @@
-const BaseComic = require('./base');
+const BaseComic = require('./base.ts');
 
 const axios = require('axios');
-const DOMParser = require('xmldom').DOMParser;
 const xpath = require('xpath');
 const cheerio = require('cheerio');
 const siteUrl = 'https://www.channelate.com/';

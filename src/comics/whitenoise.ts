@@ -1,22 +1,22 @@
-const BaseComic = require('./base');
+const BaseComic = require('./base.ts');
 
 const axios = require('axios');
 const DOMParser = require('xmldom').DOMParser;
 const xpath = require('xpath');
 
-const siteUrl = 'https://www.smbc-comics.com/';
+const siteUrl = 'http://www.white-noise-comic.com/';
 
-class SMBCComic extends BaseComic {
+class WhiteNoiseComic extends BaseComic {
   constructor() {
     super();
   }
 
   setDefaultInfo() {
     this.info = {};
-    this.info.id = 'smbc';
-    this.info.name = 'Saturday Morning Breakfast Cereal';
-    this.info.author = 'Zach Weinersmith';
-    this.info.authorUrl = 'https://www.smbc-comics.com';
+    this.info.id = 'whitenoise';
+    this.info.name = 'White Noise';
+    this.info.author = 'Adrian Lee';
+    this.info.authorUrl = 'http://www.white-noise-comic.com/';
   }
 
   // Returns a promise to a comic
@@ -28,7 +28,7 @@ class SMBCComic extends BaseComic {
         return null;
       }
 
-      const comic = new SMBCComic();
+      const comic = new WhiteNoiseComic();
 
       // Fetch comic data from response
       const doc = new DOMParser({ errorHandler: { warning: null } }).parseFromString(response.data);
@@ -38,22 +38,19 @@ class SMBCComic extends BaseComic {
       // Image url
       comic.imageUrl = imageNode.getAttribute('src');
 
-      // Comic title
-      comic.name = imageNode.getAttribute('title');
-
-      const linkNode = select('//*[@id=\'permalinktext\']', doc)[0];
+      // Comic id
+      comic.id = imageNode.getAttribute('title');
 
       // Comic url
-      comic.url = linkNode.getAttribute('value');
+      comic.url = `${siteUrl}comic/${comic.id}`;
+
+      const nameNode = select('//*[@class=\'cc-newsheader\']', doc)[0];
 
       // Comic id
-      comic.id = comic.url.split('/').slice(-1)[0];
-
-      // Bonus image
-      const bonusNode = select('//*[@id=\'aftercomic\']', doc)[0];
-
-      if (bonusNode != undefined) {
-        comic.bonusUrl = bonusNode.firstChild.getAttribute('src');
+      if (nameNode.firstChild) {
+        comic.name = nameNode.firstChild.textContent;
+      } else {
+        comic.name = nameNode.textContent;
       }
 
       return comic;
@@ -61,8 +58,8 @@ class SMBCComic extends BaseComic {
   }
 
   static getInfo() {
-    return new SMBCComic().info;
+    return new WhiteNoiseComic().info;
   }
 }
 
-module.exports = SMBCComic;
+module.exports = WhiteNoiseComic;

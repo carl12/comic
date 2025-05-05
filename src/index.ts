@@ -1,12 +1,12 @@
 const config = require('../config.json');
 
-const Database = require('../src/database');
-const { client } = require('./utility/botUtils');
+const Database = require('../src/database.ts');
+const { getSavedComic, getGuildInfo, getGuildInfoAll, addGuildInfo, updateWebComicInfo, getGuildsSubscribedTo } = Database;
+const { client } = require('./utility/botUtils.ts');
 
 const path = require('path');
 
-const { fetchComic, getComicEmbed, webComicList, registerComics, getComicImageUrl } = require('./comics/webComics');
-const { getSavedComic, getGuildInfo, getGuildInfoAll, addGuildInfo, updateWebComicInfo, getGuildsSubscribedTo } = require('../src/database');
+const { fetchComic, getComicEmbed, webComicList, registerComics, getComicImageUrl } = require('./comics/webComics.ts');
 
 const newComicCheckInterval = 30 * 60 * 1000; // 30 minutes
 
