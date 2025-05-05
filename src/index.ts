@@ -96,7 +96,7 @@ async function checkNewComics() {
       // Send comic
       const channel = await client.channels.fetch(guild.comic_channel);
       channel.send(`New ${webComic.getInfo().name} comic!`);
-      channel.send(embed);
+      // channel.send(embed);
       channel.send(imgUrl);
       posted ++;
     }
