@@ -50,7 +50,7 @@ async function checkNewComics() {
   const start = Date.now();
   let latestComic;
   for (const webComic of webComicList) {
-    const error = null;
+    let comicUpdateError = null;
     const webComicId = webComic.getInfo().id;
     try {
 
@@ -78,7 +78,7 @@ async function checkNewComics() {
         throw (Error('failed to update latest comic'));
       }
     } catch (err) {
-      error = err;
+      comicUpdateError = err;
     }
     // Get all the guilds which are subscriebd to this comic
     const guilds = await getGuildsSubscribedTo(webComicId);
@@ -88,19 +88,20 @@ async function checkNewComics() {
     for (const guild of guilds) {
       if (guild.comic_channel == '') {
         continue;
-      } else if (error !== null) {
-        console.error(`Failed to update latest ${webComic.getInfo().name} for guild ${guild.guild_id}: ${error}`);
-        channel.send(`Failed to update latest ${webComic.getInfo().name}: ${error}`);
+      }
+      const channel = await client.channels.fetch(guild.comic_channel);
+      if (comicUpdateError !== null) {
+        console.error(`Failed to update latest ${webComic.getInfo().name} for guild ${guild.guild_id}: ${comicUpdateError}`);
+        channel.send(`Failed to update latest ${webComic.getInfo().name}: ${comicUpdateError}`);
         continue;
       }
       // Send comic
-      const channel = await client.channels.fetch(guild.comic_channel);
       channel.send(`New ${webComic.getInfo().name} comic!`);
       // channel.send(embed);
       channel.send(imgUrl);
       posted ++;
     }
-    if (error) {
+    if (comicUpdateError) {
       console.log(`Posted ${posted} fail updates for ${webComic.getInfo().name} with id: ${latestComic?.id}`);
     } else {
       console.log(`Posted ${posted} subscribe updates for ${webComic.getInfo().name} with id: ${latestComic?.id}`);
