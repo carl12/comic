@@ -2,6 +2,7 @@ import config from '../config.json' with { type: "json" };
 
 
 import { getSavedComic, getGuildInfo, getGuildInfoAll, addGuildInfo, updateWebComicInfo, getGuildsSubscribedTo, connectDatabse } from '../src/database.ts';
+// TODO: update to using Sapphire https://github.com/sapphiredev
 import { client } from './utility/botUtils.ts';
 
 import path from 'path';
@@ -29,7 +30,7 @@ client.registry
   .registerCommandsIn(path.join(__dirname, 'commands'));
 
 client.once('ready', () => {
-  console.log(`Logged in as ${client.user!.tag}! (${client.user!.id})`);
+  console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
   CheckNewGuilds();
 });
 
